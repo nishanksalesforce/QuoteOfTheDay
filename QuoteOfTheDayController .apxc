@@ -1,0 +1,19 @@
+public class QuoteOfTheDayController {
+  public String getQuote() {
+    Http http = new Http();
+    HttpRequest request = new HttpRequest();
+    request.setEndpoint('https://quotes.rest/qod?');
+    request.setMethod('GET');
+    HttpResponse response = http.send(request);
+    if (response.getStatusCode() == 200) {
+      JSONParser parser = JSON.createParser(response.getBody());
+      while (parser.nextToken() != null) {
+        if (parser.getCurrentToken() == JSONToken.FIELD_NAME && parser.getText() == 'quote') {
+          parser.nextToken();
+          return parser.getText();
+        }
+      }
+    }
+    return null;
+  }
+}
